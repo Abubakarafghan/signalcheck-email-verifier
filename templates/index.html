@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SignalCheck Email Verifier</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div><p class="eyebrow">LOCAL EMAIL INTELLIGENCE</p><h1>SignalCheck <span class="brand-mark">/ 01</span></h1></div>
+      <div class="top-actions"><p class="trust">Built for better sending decisions.<br>Results are signals, never promises.</p><button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode"><span class="theme-icon">◐</span><span id="theme-label">Dark mode</span></button></div>
+    </header>
+    <section class="intro"><div><h2>Find the addresses worth sending to.</h2><p>Check format, mail routing, disposable domains, role accounts, and optional SMTP responses in one private local workflow.</p></div><div class="signal-mark">◎</div></section>
+    <section class="workspace">
+      <form id="verify-form" class="panel input-panel">
+        <div class="panel-heading"><div><span class="kicker">01 / SOURCE</span><h3>Bring your list</h3></div><span class="dot"></span></div>
+        <label for="emails">Paste addresses</label><textarea id="emails" name="emails" placeholder="alex@example.com&#10;team@company.org"></textarea>
+        <div class="or"><span>or upload a file</span></div>
+        <label class="upload"><input type="file" name="file" accept=".csv,.xlsx"><strong>Choose CSV or XLSX</strong><small>Up to 10,000 addresses</small></label>
+        <div class="options"><label><input type="checkbox" name="keep_duplicates"> Keep duplicates</label><label><input type="checkbox" name="smtp" value="true" checked> Check recipient server</label></div>
+        <button class="primary" type="button" id="preview-btn">Preview list <span>→</span></button>
+        <div id="preview" class="preview hidden"></div>
+        <button class="primary hidden" type="submit" id="start-btn">Start verification <span>→</span></button>
+      </form>
+      <section class="panel progress-panel">
+        <div class="panel-heading"><div><span class="kicker">02 / VERIFY</span><h3>Verification pulse</h3></div><span id="status-pill" class="pill idle">READY</span></div>
+        <div class="progress-copy"><strong id="progress-number">0%</strong><span id="progress-label">Waiting for a list</span></div><div class="progress-track"><div id="progress-bar"></div></div>
+        <div class="metrics"><div><strong id="processed">0</strong><span>processed</span></div><div><strong id="remaining">0</strong><span>remaining</span></div><div><strong id="duplicates">0</strong><span>duplicates</span></div></div>
+        <div class="actions"><button type="button" id="pause-btn" disabled>Pause</button><button type="button" id="cancel-btn" class="quiet" disabled>Cancel</button></div>
+        <p class="note">A likely-valid result means the address has plausible routing and no strong rejection signal. It does not prove a human monitors the inbox.</p>
+      </section>
+    </section>
+    <section class="results panel">
+      <div class="results-head"><div><span class="kicker">03 / RESULTS</span><h3>Sending shortlist</h3></div><div class="exports"><button id="valid-btn" disabled>Download valid</button><button id="invalid-btn" disabled>Download invalid</button><button id="csv-btn" disabled>Export all CSV</button><button id="xlsx-btn" disabled>Export all XLSX</button></div></div>
+      <div id="summary" class="summary"></div>
+      <div class="table-wrap"><table><thead><tr><th>Email</th><th>Routing</th><th>Role</th><th>SMTP</th><th>Final signal</th><th>Reason</th></tr></thead><tbody id="results-body"><tr><td colspan="6" class="empty">Run a verification to see your shortlist.</td></tr></tbody></table></div>
+      <div class="pagination" id="pagination"><button id="previous-page" type="button" disabled>← Previous</button><span id="page-status">Showing 0–0 of 0</span><button id="next-page" type="button" disabled>Next →</button><label>Rows <select id="page-size"><option value="20" selected>20</option><option value="50">50</option><option value="100">100</option><option value="all">All</option></select></label></div>
+    </section>
+    <footer class="site-footer"><span>SignalCheck</span><span>Built by <strong>Abu Bakar</strong> · Itsabu Works</span><a href="https://www.itsabu.pk/" target="_blank" rel="noopener noreferrer">itsabu.pk ↗</a></footer>
+  </main>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

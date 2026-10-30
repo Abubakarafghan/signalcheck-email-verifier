@@ -1,0 +1,5 @@
+# Add one disposable domain per line.
+mailinator.com
+guerrillamail.com
+temp-mail.org
+10minutemail.com

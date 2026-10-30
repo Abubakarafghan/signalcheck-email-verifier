@@ -1,0 +1,29 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Uploads & Exports (keep directory structure via .gitkeep)
+uploads/*
+!uploads/.gitkeep
+exports/*
+!exports/.gitkeep
+
+# Environment files
+.env
+.env.local
+
+# Operating System & IDE artifacts
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo

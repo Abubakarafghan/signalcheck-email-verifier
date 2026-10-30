@@ -1,0 +1,6 @@
+Flask>=3.0,<4
+dnspython>=2.6,<3
+email-validator>=2.2,<3
+pandas>=2.2,<3
+openpyxl>=3.1,<4
+pytest>=8,<9
