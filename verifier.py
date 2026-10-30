@@ -30,13 +30,16 @@ class VerificationResult:
 
 
 def load_disposable_domains(path: Path) -> set[str]:
-    if not path.exists():
+    try:
+        if not path.exists():
+            return set()
+        return {
+            line.strip().lower()
+            for line in path.read_text(encoding="utf-8").splitlines()
+            if line.strip() and not line.lstrip().startswith("#")
+        }
+    except (OSError, PermissionError):
         return set()
-    return {
-        line.strip().lower()
-        for line in path.read_text(encoding="utf-8").splitlines()
-        if line.strip() and not line.lstrip().startswith("#")
-    }
 
 
 def _dns_status(domain: str, timeout: float) -> tuple[str, str, list[str]]:

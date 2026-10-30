@@ -48,28 +48,34 @@ def parse_emails_from_request() -> list[str]:
 
 
 def run_job(job_id: str, emails: list[str], smtp_enabled: bool) -> None:
-    disposable = load_disposable_domains(config.DISPOSABLE_FILE)
-    results = []
-    with ThreadPoolExecutor(max_workers=config.MAX_WORKERS) as pool:
-        futures = [pool.submit(verify_email, email, disposable, config.DNS_TIMEOUT, smtp_enabled, config.SMTP_TIMEOUT) for email in emails]
-        for future in futures:
-            with jobs_lock:
-                job = jobs[job_id]
-                if job["cancelled"]:
-                    break
-                while job["paused"] and not job["cancelled"]:
-                    jobs_lock.release()
-                    threading.Event().wait(0.1)
-                    jobs_lock.acquire()
-                if job["cancelled"]:
-                    break
-            result = future.result()
-            results.append(result.as_dict())
-            with jobs_lock:
-                jobs[job_id]["processed"] = len(results)
-                jobs[job_id]["results"] = results
-    with jobs_lock:
-        jobs[job_id]["status"] = "CANCELLED" if jobs[job_id]["cancelled"] else "COMPLETE"
+    try:
+        disposable = load_disposable_domains(config.DISPOSABLE_FILE)
+        results = []
+        with ThreadPoolExecutor(max_workers=config.MAX_WORKERS) as pool:
+            futures = [pool.submit(verify_email, email, disposable, config.DNS_TIMEOUT, smtp_enabled, config.SMTP_TIMEOUT) for email in emails]
+            for future in futures:
+                with jobs_lock:
+                    job = jobs[job_id]
+                    if job["cancelled"]:
+                        break
+                    while job["paused"] and not job["cancelled"]:
+                        jobs_lock.release()
+                        threading.Event().wait(0.1)
+                        jobs_lock.acquire()
+                    if job["cancelled"]:
+                        break
+                result = future.result()
+                results.append(result.as_dict())
+                with jobs_lock:
+                    jobs[job_id]["processed"] = len(results)
+                    jobs[job_id]["results"] = results
+        with jobs_lock:
+            jobs[job_id]["status"] = "CANCELLED" if jobs[job_id]["cancelled"] else "COMPLETE"
+    except Exception as exc:
+        with jobs_lock:
+            if job_id in jobs:
+                jobs[job_id]["status"] = "ERROR"
+                jobs[job_id]["error"] = str(exc)
 
 
 def export_rows(rows: list[dict], suffix: str):
@@ -181,4 +187,4 @@ def export_category(job_id: str, category: str):
 
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000, debug=True)
+    app.run(host=config.HOST, port=config.PORT, debug=config.DEBUG)

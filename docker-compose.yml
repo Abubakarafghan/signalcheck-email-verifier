@@ -1,0 +1,29 @@
+services:
+  signalcheck:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: signalcheck-email-verifier:latest
+    container_name: signalcheck
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=5000
+      - MAX_WORKERS=8
+      - DNS_TIMEOUT=5
+      - SMTP_TIMEOUT=8
+      - SMTP_ENABLED=true
+      - MAX_EMAILS=10000
+      - MAX_UPLOAD_BYTES=10485760
+    volumes:
+      - ./uploads:/app/uploads:z
+      - ./exports:/app/exports:z
+      - ./data:/app/data:z
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5000/ || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s

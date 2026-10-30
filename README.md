@@ -12,6 +12,12 @@ Built and maintained by **Abu Bakar / Itsabu Works**: [itsabu.pk](https://www.it
 
 ---
 
+<p align="center">
+  <img src="UI.png" alt="SignalCheck Web Dashboard Preview" width="100%" />
+</p>
+
+---
+
 ## 🌟 Why SignalCheck?
 
 Most email verification services charge expensive monthly subscriptions and require you to upload your confidential customer contacts to third-party clouds.
@@ -65,17 +71,51 @@ SignalCheck classifies every address into transparent, actionable signals:
 
 ## 🚀 Quick Start & Installation
 
-### Prerequisites
+### Option 1: Running with Docker & Docker Compose (Recommended)
+
+Ensure [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/) are installed.
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/Abubakarafghan/signalcheck-email-verifier.git
+cd signalcheck-email-verifier
+
+# 2. Start the container with Docker Compose
+docker compose up -d --build
+```
+
+The application will be live at **`http://localhost:5000`**!
+
+To stop the container:
+```bash
+docker compose down
+```
+
+Alternatively, run with standalone Docker:
+```bash
+docker build -t signalcheck .
+docker run -d -p 5000:5000 \
+  -v $(pwd)/uploads:/app/uploads:z \
+  -v $(pwd)/exports:/app/exports:z \
+  -v $(pwd)/data:/app/data:z \
+  --name signalcheck-app signalcheck
+```
+
+---
+
+### Option 2: Local Python Setup
+
+#### Prerequisites
 - Python 3.10, 3.11, 3.12, 3.13, or 3.14
 - Git
 
-### 1. Clone the Repository
+#### 1. Clone the Repository
 ```bash
 git clone https://github.com/Abubakarafghan/signalcheck-email-verifier.git
 cd signalcheck-email-verifier
 ```
 
-### 2. Set Up a Virtual Environment
+#### 2. Set Up a Virtual Environment
 
 **On Linux / macOS:**
 ```bash
@@ -89,12 +129,12 @@ python -m venv .venv
 .venv\Scripts\activate
 ```
 
-### 3. Install Dependencies
+#### 3. Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Run the Application
+#### 4. Run the Application
 ```bash
 python app.py
 ```

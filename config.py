@@ -11,6 +11,9 @@ DNS_TIMEOUT = float(os.getenv("DNS_TIMEOUT", "5"))
 SMTP_TIMEOUT = float(os.getenv("SMTP_TIMEOUT", "8"))
 MAX_WORKERS = int(os.getenv("MAX_WORKERS", "8"))
 SMTP_ENABLED = os.getenv("SMTP_ENABLED", "true").lower() == "true"
+HOST = os.getenv("HOST", "0.0.0.0")
+PORT = int(os.getenv("PORT", "5000"))
+DEBUG = os.getenv("DEBUG", "false").lower() == "true"
 
 for directory in (UPLOAD_DIR, EXPORT_DIR, DISPOSABLE_FILE.parent):
     directory.mkdir(parents=True, exist_ok=True)
